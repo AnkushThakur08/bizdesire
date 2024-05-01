@@ -1,8 +1,8 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "../../store";
 import { IuserFormRequest } from "../../../utils/IUserFormRequest";
-import { db, firestore } from "../../../firebase/firebase.config.tsx";
+import { db } from "../../../firebase/firebase.config.tsx";
 import { addDoc, collection } from "firebase/firestore";
 
 const initialState: IuserFormRequest = {
