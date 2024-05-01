@@ -58,7 +58,6 @@ const UserForm: React.FC = () => {
     const file = event.target.files && event.target.files[0];
     if (file) {
       setSelectedFile(file);
-      // Handle file upload logic here
     }
   };
 
