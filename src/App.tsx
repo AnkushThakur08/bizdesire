@@ -1,6 +1,6 @@
 import { Provider } from "react-redux";
 import { store } from "./redux/store";
-import UserForm from "./components/form";
+import UserForm from "./components/userForm";
 import "./App.css";
 
 function App() {
