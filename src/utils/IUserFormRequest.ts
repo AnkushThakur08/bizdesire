@@ -8,4 +8,8 @@ export interface IuserFormRequest {
   sameAsResidential: boolean;
   permanentStreet1: string;
   permanentStreet2: string;
+  fileName: string;
+  fileType: string;
+  fileName2: string;
+  fileType2: string;
 }

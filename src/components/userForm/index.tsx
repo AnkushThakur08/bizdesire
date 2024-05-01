@@ -9,6 +9,7 @@ import DocumentUploadForm from "../documentUploadForm";
 
 const UserForm: React.FC = () => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [selectedFileTwo, setSelectedFileTwo] = useState<File | null>(null);
   const [sameAsResidential, setSameAsResidential] = useState<boolean>(false);
 
   const initialValues: IuserFormRequest = {
@@ -21,6 +22,10 @@ const UserForm: React.FC = () => {
     sameAsResidential: false,
     permanentStreet1: "",
     permanentStreet2: "",
+    fileName: "",
+    fileType: "",
+    fileName2: "",
+    fileType2: "",
   };
 
   const validationSchema = Yup.object().shape({
@@ -35,6 +40,10 @@ const UserForm: React.FC = () => {
     }),
     street1: Yup.string().required("Street 1 is required"),
     street2: Yup.string().required("Street 2 is required"),
+    fileName: Yup.string().required("File name is required"),
+    fileType: Yup.string().required("File type is required"),
+    fileName2: Yup.string().required("File name is required"),
+    fileType2: Yup.string().required("File type is required"),
   });
 
   const userForm = useFormik<IuserFormRequest>({
@@ -75,8 +84,7 @@ const UserForm: React.FC = () => {
 
             <AddressForm handleCheckboxChange={handleCheckboxChange} sameAsResidential={sameAsResidential} />
 
-            <DocumentUploadForm selectedFile={selectedFile} handleChange={userForm.handleChange} handleFileChange={handleFileChange} />
-
+            <DocumentUploadForm values={userForm.values} selectedFile={selectedFile} handleFileChange={handleFileChange} />
             <button className="p-4 bg-black text-white m-8 text-xl" type="submit">
               Submit
             </button>
