@@ -24,6 +24,7 @@ export const userSlice = createSlice({
   initialState,
   reducers: {
     setUser: (state, action: PayloadAction<IuserFormRequest>) => {
+      console.log("we are here", action, state);
       return { ...state, ...action.payload };
     },
   },

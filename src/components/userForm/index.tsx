@@ -1,13 +1,19 @@
 import React, { useState } from "react";
-import { Field, Form, FormikProvider, useFormik, ErrorMessage } from "formik";
+import { Form, FormikProvider, useFormik } from "formik";
 import { differenceInYears } from "date-fns";
 import { IuserFormRequest } from "../../utils/IUserFormRequest";
+import { useDispatch, useSelector } from "react-redux";
+import { setUser } from "../../redux/features/user/userSlice";
+import { RootState } from "../../redux/store";
+
 import * as Yup from "yup";
 import PersonalDetailForm from "../personlDetailForm";
 import AddressForm from "../addressForm";
 import DocumentUploadForm from "../documentUploadForm";
 
 const UserForm: React.FC = () => {
+  const userData = useSelector((state: RootState) => state.user);
+  const dispatch = useDispatch();
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [selectedFileTwo, setSelectedFileTwo] = useState<File | null>(null);
   const [sameAsResidential, setSameAsResidential] = useState<boolean>(false);
@@ -51,6 +57,7 @@ const UserForm: React.FC = () => {
     validationSchema: validationSchema,
     onSubmit: (values: IuserFormRequest) => {
       console.log("handleSubmit Works");
+      dispatch(setUser(values));
     },
   });
 
@@ -73,6 +80,7 @@ const UserForm: React.FC = () => {
   };
 
   console.log(userForm);
+  console.log("After Redux", userData);
   return (
     <>
       <div>

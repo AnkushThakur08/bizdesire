@@ -11,9 +11,6 @@ interface IDocumentUploadFormProps {
 }
 
 const DocumentUploadForm: React.FC<IDocumentUploadFormProps> = ({ handleFileChange, selectedFile, values }) => {
-  console.log(values, "check");
-  console.log(selectedFile, "selectedFile");
-
   return (
     <>
       <div>
