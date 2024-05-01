@@ -1,12 +1,12 @@
 import React, { useState } from "react";
-import { Formik, Field, Form, FormikHelpers, FormikProvider, useFormik } from "formik";
+import { Field, Form, FormikProvider, useFormik, ErrorMessage } from "formik";
 import { differenceInYears } from "date-fns";
+import { IuserFormRequest } from "../../utils/IUserFormRequest";
 import * as Yup from "yup";
-
-interface IuserFormRequest {}
 
 const UserForm: React.FC = () => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [sameAsResidential, setSameAsResidential] = useState<boolean>(false);
 
   const initialValues: IuserFormRequest = {
     firstName: "",
@@ -26,10 +26,12 @@ const UserForm: React.FC = () => {
     email: Yup.string().required("Email is required").email("Invalid email"),
     dob: Yup.date().test("dob", "Should be greater than 18", function (value) {
       if (value) {
-        return differenceInYears(value, new Date()) >= 18;
+        return differenceInYears(new Date(), new Date(value)) >= 18;
       }
       return false;
     }),
+    street1: Yup.string().required("Street 1 is required"),
+    street2: Yup.string().required("Street 2 is required"),
   });
 
   const userForm = useFormik<IuserFormRequest>({
@@ -48,6 +50,17 @@ const UserForm: React.FC = () => {
     }
   };
 
+  const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSameAsResidential(event.target.checked);
+    if (event.target.checked) {
+      userForm.setFieldValue("permanentStreet1", userForm.values.street1);
+      userForm.setFieldValue("permanentStreet2", userForm.values.street2);
+    } else {
+      userForm.setFieldValue("permanentStreet1", "");
+      userForm.setFieldValue("permanentStreet2", "");
+    }
+  };
+
   console.log(userForm);
   return (
     <>
@@ -61,6 +74,7 @@ const UserForm: React.FC = () => {
                   First Name
                 </label>
                 <Field className="border-2 p-2" id="firstName" name="firstName" placeholder="Enter your first name here." />
+                <ErrorMessage name="firstName" component="div" className="text-red-500 text-left" />
               </div>
 
               <div className="flex flex-col">
@@ -68,6 +82,7 @@ const UserForm: React.FC = () => {
                   Last Name
                 </label>
                 <Field className="border-2 p-2" id="lastName" name="lastName" placeholder="Enter your last name here." />
+                <ErrorMessage name="lastName" component="div" className="text-red-500 text-left" />
               </div>
 
               <div className="flex flex-col">
@@ -75,13 +90,15 @@ const UserForm: React.FC = () => {
                   Email
                 </label>
                 <Field className="border-2 p-2" id="email" name="email" placeholder="myname@example.com" type="email" />
+                <ErrorMessage name="email" component="div" className="text-red-500 text-left" />
               </div>
 
               <div className="flex flex-col">
                 <label className="flex align-start font-bold" htmlFor="dateOfBirth">
                   Date of Birth
                 </label>
-                <Field className="border-2 p-2" id="dateOfBirth" name="dateOfBirth" placeholder="YYYY-MM-DD" type="date" />
+                <Field className="border-2 p-2" id="dob" name="dob" placeholder="YYYY-MM-DD" type="date" />
+                <ErrorMessage name="dob" component="div" className="text-red-500 text-left" />
               </div>
             </div>
             <h1 className="flex align-start mt-6 font-bold">Resident area</h1>
@@ -91,33 +108,55 @@ const UserForm: React.FC = () => {
                   Street 1
                 </label>
                 <Field className="border-2 p-2" id="street1" name="street1" placeholder="Enter your street address (line 1)." />
+                <ErrorMessage name="street1" component="div" className="text-red-500 text-left" />
               </div>
               <div className="flex flex-col">
                 <label className="flex align-start" htmlFor="street2">
                   Street 2
                 </label>
                 <Field className="border-2 p-2" id="street2" name="street2" placeholder="Enter your street address (line 2)." />
+                <ErrorMessage name="street2" component="div" className="text-red-500 text-left" />
               </div>
             </div>
             <div className="flex gap-4 mt-8">
-              <Field className="border-2 p-2" id="permanentAddress" name="permanentAddress" type="checkbox" />
+              <Field
+                className="border-2 p-2"
+                id="permanentAddress"
+                name="permanentAddress"
+                type="checkbox"
+                checked={sameAsResidential}
+                onChange={handleCheckboxChange}
+              />
               <label className="flex align-start" htmlFor="permanentAddress">
                 Same as Residential area
               </label>
             </div>
+
             <h1 className="flex align-start font-bold mt-4">Permanent Address</h1>
             <div className="grid grid-cols-2 gap-4">
               <div className="flex flex-col">
-                <label className="flex align-start" htmlFor="street1">
+                <label className="flex align-start" htmlFor="permanentStreet1">
                   Street 1
                 </label>
-                <Field className="border-2 p-2" id="street1" name="street1" placeholder="Enter your street address (line 1)." />
+                <Field
+                  className="border-2 p-2"
+                  id="permanentStreet1"
+                  name="permanentStreet1"
+                  placeholder="Enter your street address (line 1)."
+                  disabled={sameAsResidential}
+                />
               </div>
               <div className="flex flex-col">
-                <label className="flex align-start" htmlFor="street2">
+                <label className="flex align-start" htmlFor="permanentStreet2">
                   Street 2
                 </label>
-                <Field className="border-2 p-2" id="street2" name="street2" placeholder="Enter your street address (line 2)." />
+                <Field
+                  className="border-2 p-2"
+                  id="permanentStreet2"
+                  name="permanentStreet2"
+                  placeholder="Enter your street address (line 2)."
+                  disabled={sameAsResidential}
+                />
               </div>
             </div>
             <h1 className="flex align-start font-bold mt-4">Upload Documents</h1>
