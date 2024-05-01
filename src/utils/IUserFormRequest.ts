@@ -12,4 +12,5 @@ export interface IuserFormRequest {
   fileType: string;
   fileName2: string;
   fileType2: string;
+  id?: string;
 }

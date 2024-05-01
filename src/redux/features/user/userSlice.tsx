@@ -27,12 +27,12 @@ async function addDataToFireStore(newData: IuserFormRequest) {
       firstName: newData.firstName,
       lastName: newData.lastName,
       email: newData.email,
-      dateOfBirth: newData.dob,
-      localStreetAddress1: newData.street1,
-      localStreetAddress2: newData.street2,
+      dob: newData.dob,
+      street1: newData.street1,
+      street2: newData.street2,
       sameAsResidential: newData.sameAsResidential,
-      permanentStreetAddress1: newData.permanentStreet1,
-      permanentStreetAddress2: newData.permanentStreet2,
+      permanentStreet1: newData.permanentStreet1,
+      permanentStreet2: newData.permanentStreet2,
       fileName: newData.fileName,
       fileType: newData.fileType,
       fileName2: newData.fileName2,
@@ -49,7 +49,6 @@ export const userSlice = createSlice({
   initialState,
   reducers: {
     setUser: (state, action: PayloadAction<IuserFormRequest>) => {
-      console.log("we are here", action, state);
       const newState = { ...state, ...action.payload };
       addDataToFireStore(newState);
       return newState;
